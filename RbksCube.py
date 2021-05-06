@@ -1,3 +1,7 @@
+'''
+Author: Karim Q.
+Date: 6/5/21
+'''
 import numpy as np
 
 #* In CubeList: Index0=Front, Index1=Right, Index2=Back, Index3=Left, Index4=Up, Index5=Down
