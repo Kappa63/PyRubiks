@@ -1,8 +1,5 @@
-'''
-Author: Karim Q.
-Date: 6/5/21
-'''
 import numpy as np
+from PyGCube import Graphics
 
 #* In CubeList: Index0=Front, Index1=Right, Index2=Back, Index3=Left, Index4=Up, Index5=Down
 
@@ -12,24 +9,27 @@ import numpy as np
 
 class MakeCube:
     def __init__(self, Cube = None, AutoUpdateCube = True):
-        self._SolvedCube = [[['WOB', 'WB', 'WRB'], ['WO', 'W', 'WR'], ['WOG', 'WG', 'WRG']], 
-                            [['RWB', 'RB', 'RYB'], ['RW', 'R', 'RY'], ['RWG', 'RG', 'RYG']], 
-                            [['YRB', 'YB', 'YOB'], ['YR', 'Y', 'YO'], ['YRG', 'YG', 'YOG']], 
-                            [['OYB', 'OB', 'OWB'], ['OY', 'O', 'OW'], ['OYG', 'OG', 'OWG']], 
-                            [['BOY', 'BY', 'BRY'], ['BO', 'B', 'BR'], ['BOW', 'BW', 'BRW']], 
-                            [['GOW', 'GW', 'GRW'], ['GO', 'G', 'GR'], ['GOY', 'GY', 'GRY']]]
-        self.Cube = Cube if Cube else self._SolvedCube.copy()
+        self._SolvedCube = [[["W"]*3]*3, [["R"]*3]*3, [["Y"]*3]*3, [["O"]*3]*3, [["B"]*3]*3, [["G"]*3]*3]
+        self.Cube = Cube if Cube else FaceMatch(self._SolvedCube)
         self.Faces = [[[Color[0] for Color in Row] for Row in Face] for Face in self.Cube]
+        self.Flat = np.array(self.Faces).flatten().tolist()
         self.Front, self.Right, self.Back, self.Left, self.Up, self.Down = tuple(self.Cube)
         self.AutoUpdate = AutoUpdateCube
+        self._CubeGraphic = None
        
     def UpdateCube(self):
         self.Cube = [self.Front, self.Right, self.Back, self.Left, self.Up, self.Down]
         self.Faces = [[[Color[0] for Color in Row] for Row in Face] for Face in self.Cube]
+        self.Flat = np.array(self.Faces).flatten().tolist()
+        if self._CubeGraphic: self._CubeGraphic._UpdateCubeGraphics()
 
     def CheckSolved(self):
         CubeTemp = [[[Color[0] for Color in Row] for Row in Face] for Face in self.Cube] 
-        return sorted(CubeTemp) == sorted([[["W"]*3]*3, [["R"]*3]*3, [["Y"]*3]*3, [["O"]*3]*3, [["B"]*3]*3, [["G"]*3]*3])
+        return sorted(CubeTemp) == sorted(self._SolvedCube)
+
+    def StartGraphics(self):
+        self._CubeGraphic = Graphics(self)
+        self._CubeGraphic.Start()
 
     def _RearrangeCorners(self, Face, Corners):
         CornerArrangements = {1: (0, 0), 2: (0, 2), 3: (2, 0), 4: (2, 2)}
@@ -501,7 +501,7 @@ def FaceMatch(Faces):
                 ArangedFaces[-1][-1].append(Color+TempC)
     return ArangedFaces
 
-Cube = MakeCube() #Clean Cube
+Cube1 = MakeCube() # Clean Cube
 
 Faces = [[["R", "W", "O"], ["B", "O", "O"], ["B", "R", "O"]], # Front Face
          [["Y", "W", "R"], ["Y", "W", "R"], ["Y", "W", "G"]], # Right Face
@@ -510,4 +510,6 @@ Faces = [[["R", "W", "O"], ["B", "O", "O"], ["B", "R", "O"]], # Front Face
          [["O", "R", "W"], ["G", "B", "O"], ["Y", "B", "G"]], # Top Face
          [["W", "G", "B"], ["B", "G", "R"], ["R", "G", "Y"]]] # Bottom Face
 
-Cube = MakeCube(FaceMatch(Faces)) # Use Faces as Cube
+Cube2 = MakeCube(FaceMatch(Faces)) # Use Faces as Cube
+
+Cube2.StartGraphics() # Run The Graphics
