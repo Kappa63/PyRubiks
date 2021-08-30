@@ -1,4 +1,9 @@
+'''
+Author: Karim Q.
+Date: 6/1/21
+'''
 import numpy as np
+import random
 from PyGCube import Graphics
 
 #* In CubeList: Index0=Front, Index1=Right, Index2=Back, Index3=Left, Index4=Up, Index5=Down
@@ -466,6 +471,14 @@ class MakeCube:
 
         if self.AutoUpdate: self.UpdateCube()
 
+    def Shuffle(self):
+        Moves = ["SPrime", "S", "EPrime", "E", "MPrime", "M", "ZPrime", "Z", "YPrime", "Y", "XPrime", 
+                 "X", "bPrime", "b", "lPrime", "l", "dPrime", "d", "fPrime", "f", "rPrime", "r", "uPrime", 
+                 "u", "D2", "DPrime", "D", "U2", "UPrime", "U", "B2", "BPrime", "B", "L2", "LPrime", 
+                 "L", "R2", "RPrime", "R", "F2", "FPrime", "F"]
+        ShufflingMoves = random.choices(Moves, k=random.randint(20, 30))
+        for Move in ShufflingMoves: getattr(self, Move)()
+
 def FaceMatch(Faces):
     Accordances = {(0, 0, 0): [(3, 0, 2), (4, 2, 0)], (0, 0, 1): [(4, 2, 1)], (0, 0, 2): [(1, 0, 0), (4, 2, 2)],
                    (0, 1, 0): [(3, 1, 2)], (0, 1, 2): [(1, 1, 0)], 
@@ -512,4 +525,4 @@ Faces = [[["R", "W", "O"], ["B", "O", "O"], ["B", "R", "O"]], # Front Face
 
 Cube2 = MakeCube(FaceMatch(Faces)) # Use Faces as Cube
 
-Cube2.StartGraphics() # Run The Graphics
+Cube1.StartGraphics() # Run The Graphics
