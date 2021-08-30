@@ -1,3 +1,7 @@
+'''
+Author: Karim Q.
+Date: 6/1/21
+'''
 from ursina import *
 
 Colors = {"W":color.white, "R":color.red, "Y":color.yellow, "O":color.orange, "B":color.blue, "G":color.green}
